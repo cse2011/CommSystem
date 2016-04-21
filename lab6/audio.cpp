@@ -38,7 +38,7 @@ int main(int argc,const char* argv[])
 		string modu_type = string(argv[1]);
 		double Es = atof(argv[2]);
 		double N0 = atof(argv[3]);
-		string out_file_name = string("output_") + modu_type + string(argv[2]) + string(".wav");
+		string out_file_name = string("output/") + modu_type + string(argv[2]) + string(".wav");
 		FILE * infile = fopen("input.wav","rb");
 		FILE * outfile = fopen(out_file_name.c_str(),"wb");
 
@@ -75,13 +75,10 @@ int main(int argc,const char* argv[])
 				bitset<8*BUFSIZE> tx_info_bits(data_str);
 
 				//bitset<8*BUFSIZE*2> tx_coded_bits;
-				//tx_coded_bits = conv_encoder(tx_info_bits);
 
 				bitset<8*BUFSIZE> tx_coded_bits;
 				tx_coded_bits = tx_info_bits;
-				//////////////////////////////////////////////////////
 				
-
 				vector<tuple<double,double> > tx_symbols;
 				tx_symbols = modulation(tx_coded_bits,modu_type,Es);
 

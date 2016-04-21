@@ -82,3 +82,22 @@ string md_detector(tuple<double,double> symbol,string modu_type,double amp){
 		}
 	}
 }
+
+template< size_t size>
+bitset<size> random_bitset( double p = 0.5) {
+
+    bitset<size> bits;
+    random_device rd;
+    mt19937 gen(rd());
+    bernoulli_distribution d(p);
+
+    for( int n = 0; n < size; ++n) {
+        bits[n] = d(gen);
+    }
+    return bits;
+}
+double calculate_ber(bitset<BUFSIZE*8> rx,bitset<BUFSIZE*8> tx){
+	//calculating hamming distance
+	size_t hamming_distance = (tx ^ rx).count();
+	return double(hamming_distance)/tx.size();
+}
