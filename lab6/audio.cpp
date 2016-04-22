@@ -12,7 +12,7 @@
 #include "util.h"
 
 using namespace std;
-#define BUFSIZE (15)
+
 // WAVE PCM soundfile format
 typedef struct header_file
 {

@@ -11,8 +11,6 @@
 #include "util.h"
 using namespace std;
 
-#define BUFSIZE (15)
-
 template< size_t size>
 bitset<size> random_bitset( double p){
 

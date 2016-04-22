@@ -11,8 +11,8 @@
 #include <bitset>
 #include <string>
 #include <limits>
+#include "util.h"
 
-#define BUFSIZE (15)
 const double POS_INF = numeric_limits<double>::infinity();
 
 using namespace std;

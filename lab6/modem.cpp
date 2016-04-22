@@ -1,8 +1,5 @@
 #include "modem.h"
-#include "util.h"
 using namespace std;
-
-#define BUFSIZE (15)
 
 vector<tuple<double,double> > Modem::modulation(bitset<8*BUFSIZE> bits){
 	vector<tuple<double,double> > symbols;

@@ -12,10 +12,8 @@
 #include <cmath>
 #include <string>
 #include <bitset>
-
+#include "util.h"
 using namespace std;
-#define BUFSIZE (15)
-
 class Modem{
 public:
 	Modem(string _modu_type,double _Eb){
