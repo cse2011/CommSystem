@@ -1,10 +1,21 @@
 CXXFLAGS = -O3 -std=c++11
 CXX = g++
 
-audio : audio.cpp
-	@$(CXX) $(CXXFLAGS) $^ -o $@
-exp : main.cpp
-	@$(CXX) $(CXXFLAGS) $^ -o $@
+EXEC = audio exp
+
+CSRCS=$(wildcard *.cpp)
+COBJS  = $(addsuffix .o, $(basename $(CSRCS)))
+
+audio : modem.o util.o audio.o
+	@echo "> Building $@"
+	@$(CXX) $(LDFLAGS) $^ -o $@
+exp : modem.o util.o main.o
+	@echo "> Building $@"
+	@$(CXX) $(LDFLAGS) $^ -o $@
+%.o: %.cpp
+	@echo "> Compiling $<"
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 clean:
-	@$(RM) audio exp
+	@$(RM) EXEC
 	@$(RM) output/*
+	@$(RM) *.o

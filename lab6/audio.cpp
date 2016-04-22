@@ -9,6 +9,7 @@
 
 //#include "convolution.h"
 #include "modem.h"
+#include "util.h"
 
 using namespace std;
 #define BUFSIZE (15)
@@ -36,8 +37,9 @@ int main(int argc,const char* argv[])
 {
 	if (argc == 4){
 		string modu_type = string(argv[1]);
-		double Es = atof(argv[2]);
+		double Eb = atof(argv[2]);
 		double N0 = atof(argv[3]);
+		N0 = modu_type.compare("BPSK")?N0:2*N0; //BPSK only one dimension noise
 		string out_file_name = string("output/") + modu_type + string(argv[2]) + string(".wav");
 		FILE * infile = fopen("input.wav","rb");
 		FILE * outfile = fopen(out_file_name.c_str(),"wb");
@@ -51,6 +53,9 @@ int main(int argc,const char* argv[])
 		unsigned char rx_buff8[BUFSIZE],tx_buff8[BUFSIZE];
 		header_p meta = (header_p)malloc(sizeof(header));
 		int nb;
+		
+		//Convolution conver();
+		Modem modemer(modu_type,Eb);
 
 		if (infile)
 		{
@@ -74,13 +79,13 @@ int main(int argc,const char* argv[])
 				}
 				bitset<8*BUFSIZE> tx_info_bits(data_str);
 
-				//bitset<8*BUFSIZE*2> tx_coded_bits;
+				//bitset<8*BUFSIZE*2> tx_coded_bits = conver.encode(tx_info_bits);
 
 				bitset<8*BUFSIZE> tx_coded_bits;
 				tx_coded_bits = tx_info_bits;
 				
 				vector<tuple<double,double> > tx_symbols;
-				tx_symbols = modulation(tx_coded_bits,modu_type,Es);
+				tx_symbols = modemer.modulation(tx_coded_bits);
 
 				vector<tuple<double,double> > rx_symbols;
 				rx_symbols.resize(tx_symbols.size());
@@ -100,9 +105,9 @@ int main(int argc,const char* argv[])
 				}
 
 				//bitset<8*BUFSIZE*2> rx_coded_bits= demodulation(rx_symbols,modu_type);
-				bitset<8*BUFSIZE> rx_coded_bits= demodulation(rx_symbols,modu_type,Es);
+				bitset<8*BUFSIZE> rx_coded_bits= modemer.demodulation(rx_symbols);
 
-				//bitset<8*BUFSIZE> rx_info_bits = conv_decoder(rx_coded_bits);
+				//bitset<8*BUFSIZE> rx_info_bits = conver.decode(rx_coded_bits);
 				bitset<8*BUFSIZE> rx_info_bits = rx_coded_bits;
 
 
@@ -118,7 +123,7 @@ int main(int argc,const char* argv[])
 		return 0;
 	}
 	else{
-		cerr << "Usage : ./audio <MODEM> <Es> <N0>" << endl;
+		cerr << "Usage : ./audio <MODEM> <Eb> <N0>" << endl;
 		exit(1);
 	}
 }
