@@ -1,11 +1,11 @@
-#ifndef MODEM_H
-#define MODEM_H
 /****************************************************************************
   FileName     [modem.h]
   PackageName  [ MODEM ]
   Synopsis     [ COMMLAB ]
   Author       [ Juei-Yang (Tony) Hsu ]
 ****************************************************************************/
+#ifndef MODEM_H
+#define MODEM_H
 #include <iostream>
 #include <vector>
 #include <tuple>

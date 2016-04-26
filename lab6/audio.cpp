@@ -7,7 +7,7 @@
 #include <tuple>
 #include <random>
 
-//#include "convolution.h"
+#include "convolution.h"
 #include "modem.h"
 #include "util.h"
 
@@ -54,7 +54,7 @@ int main(int argc,const char* argv[])
 		header_p meta = (header_p)malloc(sizeof(header));
 		int nb;
 		
-		//Convolution conver();
+		Convolution conver;
 		Modem modemer(modu_type,Eb);
 
 		if (infile)
@@ -79,10 +79,7 @@ int main(int argc,const char* argv[])
 				}
 				bitset<8*BUFSIZE> tx_info_bits(data_str);
 
-				//bitset<8*BUFSIZE*2> tx_coded_bits = conver.encode(tx_info_bits);
-
-				bitset<8*BUFSIZE> tx_coded_bits;
-				tx_coded_bits = tx_info_bits;
+				bitset<8*BUFSIZE*2> tx_coded_bits = conver.encode(tx_info_bits);
 				
 				vector<tuple<double,double> > tx_symbols;
 				tx_symbols = modemer.modulation(tx_coded_bits);
@@ -104,12 +101,9 @@ int main(int argc,const char* argv[])
 					rx_symbols[i] = make_tuple(x,y);
 				}
 
-				//bitset<8*BUFSIZE*2> rx_coded_bits= demodulation(rx_symbols,modu_type);
-				bitset<8*BUFSIZE> rx_coded_bits= modemer.demodulation(rx_symbols);
+				bitset<8*BUFSIZE*2> rx_coded_bits= modemer.demodulation(rx_symbols);
 
-				//bitset<8*BUFSIZE> rx_info_bits = conver.decode(rx_coded_bits);
-				bitset<8*BUFSIZE> rx_info_bits = rx_coded_bits;
-
+				bitset<8*BUFSIZE> rx_info_bits = conver.decode(rx_coded_bits);
 
 				string rx_data_str = rx_info_bits.to_string();
 				for(size_t i=0;i<nb;++i){

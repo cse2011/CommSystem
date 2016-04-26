@@ -1,11 +1,11 @@
-#ifndef CONVOLUTION_H
-#define CONVOLUTION_H
 /****************************************************************************
   FileName     [convolution.h]
   PackageName  [ CONV ]
   Synopsis     [ COMMLAB  ]
   Author       [ Juei-Yang (Tony) Hsu ]
 ****************************************************************************/
+#ifndef CONVOLUTION_H
+#define CONVOLUTION_H
 
 #include <iostream>
 #include <bitset>
