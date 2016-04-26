@@ -30,7 +30,7 @@ bitset<8*BUFSIZE> Convolution::decode(bitset<8*2*BUFSIZE> coded_bits){
 		delta.resize(4);
 		bitset<2> d(coded_bits_str.substr(2*(i-1),2));
 		for(size_t cur_state=0;cur_state<4;++cur_state){
-			vector<double> costs(4);
+			vector<double> costs(4,POS_INF);
 			for(size_t from_state=0;from_state<4;++from_state){
 				int choice = transit_map[from_state][cur_state].choice;
 				if (choice != -1){
@@ -50,10 +50,10 @@ bitset<8*BUFSIZE> Convolution::decode(bitset<8*2*BUFSIZE> coded_bits){
 		if(psi.prev_state_ptr != NULL){
 			size_t next_state = psi.state;
 			psi = *(psi.prev_state_ptr);
-			info_bits += transit_map[psi.state][next_state].output.to_string();
+			info_bits += to_string(transit_map[psi.state][next_state].choice);
 		}
 	}
-	reverse(info_bits.begin(),info_bits.end());
+	//reverse(info_bits.begin(),info_bits.end());
 
 	return bitset<8*BUFSIZE>(info_bits);
 }
@@ -66,6 +66,7 @@ bitset<8*2*BUFSIZE> Convolution::encode(bitset<8*BUFSIZE> info_bits){
 	for(size_t i=0;i<info_bits.size();++i){
 		next_state = decision_map[cur_state][info_bits[i]];
 		coded_bits += transit_map[cur_state][next_state].output.to_string();
+		cur_state = next_state;
 	}
 
 	return bitset<8*2*BUFSIZE>(coded_bits);
