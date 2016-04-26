@@ -23,8 +23,8 @@ public:
 		else if(!(_modu_type.compare("8PSK"))) amp=sqrt(_Eb*3);
 		else amp=sqrt(_Eb*4/10);
 	}
-	vector<tuple<double,double> > modulation(bitset<8*BUFSIZE> bits);
-	bitset<8*BUFSIZE> demodulation(vector<tuple<double,double> >symbols);
+	vector<tuple<double,double> > modulation(bitset<8*2*BUFSIZE> bits);
+	bitset<8*2*BUFSIZE> demodulation(vector<tuple<double,double> >symbols);
 	tuple<double,double> grayMapper(unsigned long bit_char);
 	string md_detector(tuple<double,double> symbol);
 

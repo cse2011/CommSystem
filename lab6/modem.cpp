@@ -1,7 +1,7 @@
 #include "modem.h"
 using namespace std;
 
-vector<tuple<double,double> > Modem::modulation(bitset<8*BUFSIZE> bits){
+vector<tuple<double,double> > Modem::modulation(bitset<8*2*BUFSIZE> bits){
 	vector<tuple<double,double> > symbols;
 	string bits_str = bits.to_string();
 	if(!(this->modu_type.compare("BPSK"))){
@@ -25,12 +25,12 @@ vector<tuple<double,double> > Modem::modulation(bitset<8*BUFSIZE> bits){
 	return symbols;
 }
 
-bitset<8*BUFSIZE> Modem::demodulation(vector<tuple<double,double> >symbols){
+bitset<8*2*BUFSIZE> Modem::demodulation(vector<tuple<double,double> >symbols){
 	string bits_str;
 	for(size_t i=0;i<symbols.size();++i){
 		bits_str += md_detector(symbols[i]);
 	}
-	return bitset<8*BUFSIZE>(bits_str);
+	return bitset<8*2*BUFSIZE>(bits_str);
 }
 
 tuple<double,double> Modem::grayMapper(unsigned long bit_char){
