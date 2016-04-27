@@ -18,5 +18,5 @@ exp : modem.o convolution.o util.o main.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 clean:
 	@$(RM) EXEC
-	@$(RM) output/*
+	#@$(RM) output/*
 	@$(RM) *.o

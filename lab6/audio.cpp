@@ -39,7 +39,7 @@ int main(int argc,const char* argv[])
 		string modu_type = string(argv[1]);
 		double Eb = atof(argv[2]);
 		double N0 = atof(argv[3]);
-		N0 = modu_type.compare("BPSK")?N0:2*N0; //BPSK only one dimension noise
+		//N0 = modu_type.compare("BPSK")?N0:2*N0; //BPSK only one dimension noise
 		string out_file_name = string("output/") + modu_type + string(argv[2]) + string(".wav");
 		FILE * infile = fopen("input.wav","rb");
 		FILE * outfile = fopen(out_file_name.c_str(),"wb");
@@ -54,6 +54,8 @@ int main(int argc,const char* argv[])
 		header_p meta = (header_p)malloc(sizeof(header));
 		int nb;
 		
+		size_t num_diff_packets = 0;
+		size_t err_square_sum = 0;
 		Convolution conver;
 		Modem modemer(modu_type,Eb);
 
@@ -104,15 +106,22 @@ int main(int argc,const char* argv[])
 				bitset<8*BUFSIZE*2> rx_coded_bits= modemer.demodulation(rx_symbols);
 
 				bitset<8*BUFSIZE> rx_info_bits = conver.decode(rx_coded_bits);
+				if(rx_info_bits != tx_info_bits) ++num_diff_packets;
+				
 
 				string rx_data_str = rx_info_bits.to_string();
 				for(size_t i=0;i<nb;++i){
 					bitset<8> tmp(rx_data_str.substr(8*i,8));
 					rx_buff8[i] = static_cast<unsigned char>(tmp.to_ulong());
+					err_square_sum += (rx_buff8[i] - tx_buff8[i]) * (rx_buff8[i] - tx_buff8[i]);
 				}
 				fwrite(rx_buff8,1,nb,outfile);
 			}
+			cout << "=====STATISTICS=====" << endl;
+			cout << "N0 : " << N0 <<endl;
+			cout << "Eb : " << Eb << endl;
 			cout << " Number of frames in the input wave file are " << count << endl;
+			cout << err_square_sum << endl;
 		}
 		return 0;
 	}
